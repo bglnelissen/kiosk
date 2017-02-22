@@ -211,45 +211,40 @@ Login on the remote machine using VNC Viewer
 - VNC Server `kiosk`, name `Kiosk`
 - Connect. Username: `kiosk`. Password: `kiosk`
 
-#### Disable long boot time due to `dhcpcd`
-
-```
-sudo systemctl disable dhcpcd.service
-```
 --- 
 
-**Extra's**
+    **Extra's**
 
-#### Service that runs on USB insertion (obsolete)
+    #### Service that runs on USB insertion (obsolete)
 
-Create `/etc/systemd/system/kiosk.service`
+    Create `/etc/systemd/system/kiosk.service`
 
-```
-sudo touch /etc/systemd/system/kiosk.service && sudo chmod 644 /etc/systemd/system/kiosk.service
-```
+    ```
+    sudo touch /etc/systemd/system/kiosk.service && sudo chmod 644 /etc/systemd/system/kiosk.service
+    ```
 
-The service required the mountpoint and runs script when mountpoint is found.
-```
-# Kiosk
-# note: in 'service' files, dashed '-' are used instead of slashes '/'
+    The service required the mountpoint and runs script when mountpoint is found.
+    ```
+    # Kiosk
+    # note: in 'service' files, dashed '-' are used instead of slashes '/'
 
-[Unit]
-Description=Start Kiosk after mounting /media/kiosk
-Requires=media-kiosk.mount
-After=media-kiosk.mount
+    [Unit]
+    Description=Start Kiosk after mounting /media/kiosk
+    Requires=media-kiosk.mount
+    After=media-kiosk.mount
 
-[Service]
-ExecStart=/home/kiosk/bin/kiosk.sh
+    [Service]
+    ExecStart=/home/kiosk/bin/kiosk.sh
 
-[Install]
-WantedBy=media-kiosk.mount
-```
+    [Install]
+    WantedBy=media-kiosk.mount
+    ```
 
-Start the service
+    Start the service
 
-```
-sudo systemctl start kiosk.service && sudo systemctl enable kiosk.service
-```
+    ```
+    sudo systemctl start kiosk.service && sudo systemctl enable kiosk.service
+    ```
 
 #### Resource usage
 
