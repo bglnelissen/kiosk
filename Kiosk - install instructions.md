@@ -211,6 +211,11 @@ Login on the remote machine using VNC Viewer
 - VNC Server `kiosk`, name `Kiosk`
 - Connect. Username: `kiosk`. Password: `kiosk`
 
+#### Disable long boot time due to `dhcpcd`
+
+```
+sudo systemctl disable dhcpcd.service
+```
 --- 
 
 **Extra's**
