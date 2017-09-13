@@ -71,6 +71,14 @@ sudo vim /etc/hostname
 sudo /etc/init.d/hostname.sh && hostname && sudo reboot
 ```
 
+#### Enable more video memory
+
+Enable more video memory (Option '7' -> 'A3')
+
+```
+sudo raspi-config
+```
+
 #### Enable login via ssh keys
 
 ssh keys let you login without a password. Copy our local public key to the remote machine.
@@ -87,6 +95,8 @@ Install updates and upgrades, also add packes for software you use a lot.
 ```
 sudo apt-get -y update && sudo apt-get -y dist-upgrade && sudo reboot
 ```
+
+
 #### Install lightweight GUI
 
 1. Display Server (Xorg Display Server)
@@ -164,30 +174,32 @@ Due to the way FAT disks work (no file permissions etc) you can not run a script
 
 ```
 sudo mkdir -p ~/bin && \
-sudo touch ~/bin/kiosk.sh && \
-sudo chmod 755 ~/bin/kiosk.sh
+sudo touch ~/bin/kioskStarter.sh && \
+sudo chmod 755 ~/bin/kioskStarter.sh
 ```
 
-Edit: `~/bin/kiosk.sh`
+Edit: `~/bin/kioskStarter.sh`
 
 ```
 #!/bin/bash
 # b.nelissen
 
-logger "Start kiosk"
+logger "Kiosk starter..."
 
-# Kill all previous instances of open office
-killall soffice
+# make sure the display is set correctly
+export DISPLAY=:0.0
 
 # Open open office
 while true; do
-  logger "Start slideshow"
-  export DISPLAY=:0.0
-  soffice --impress --nologo --norestore --show /media/kiosk/wachtkamer.odp
-
-  # we landed here because the line above did exit...
-  logger "Slideshow exit, restart"
-  sleep 6
+  
+  if [ -f /media/kiosk/kiosk.sh ]; then\
+    logger "Found: /media/kiosk/kiosk.sh"
+    /bin/bash /media/kiosk/kiosk.sh
+  else
+    logger "Not found: /media/kiosk/kiosk.sh"
+  fi
+  
+  sleep 10  
 done
 ```
 
@@ -245,12 +257,6 @@ Login on the remote machine using VNC Viewer
     ```
     sudo systemctl start kiosk.service && sudo systemctl enable kiosk.service
     ```
-
-#### Resource usage
-
-```
-sudo iotop --only
-```
 
 #### Create backup image of the current system
 
